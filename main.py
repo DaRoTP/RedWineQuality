@@ -2,30 +2,13 @@ import pandas as pd
 from data_analysis import *
 from classificators import *
 
-if __name__ == '__main__':
-    df = pd.read_csv("winequality-red.csv")
 
-    df['typed_quality'] = pd.cut(df['quality'], bins=[0, 3, 7, 10], labels=["low", "mid", "high"])
-
-    print(df.head(10))
-
-    # Replace spaces with _ for each column
-    df.columns = df.columns.str.replace(' ', '_')
-
-    decision_tree(df)
-    bayes_algorithm(df)
-    KNN_clasification(df)
-    # logistic(df)
-
+def analyze_data(df):
     # how many null values does the column has
-    # print(df.info())
-    # print(df.isnull().sum())
+    print(df.info())
+    print(df.isnull().sum())
 
-    # # are all column values are numeric
-    # print(df.apply(lambda s: pd.to_numeric(s, errors='coerce').notnull().all()))
-
-
-    # typed_quality_chart(df)
+    typed_quality_chart(df)
 
     column_data_analysis_params = [
         {'fixed acidity': 1.03},
@@ -42,9 +25,26 @@ if __name__ == '__main__':
         {'quality': 1},
     ]
 
-    # param_dependency_heatmap(df)
-    #
-    # for param in column_data_analysis_params:
-    #     column_name = list(param.keys())[0]
-    #     get_column_value_count_info(df, column_name, param.get(column_name))
-    #     param_dependency_on_quality(df, column_name)
+    param_dependency_heatmap(df)
+
+    for param in column_data_analysis_params:
+        column_name = list(param.keys())[0]
+        get_column_value_count_info(df, column_name, param.get(column_name))
+        param_dependency_on_quality(df, column_name)
+
+
+if __name__ == '__main__':
+    df = pd.read_csv("winequality-red.csv")
+
+    df['typed_quality'] = pd.cut(df['quality'], bins=[0, 3, 7, 10], labels=["low", "mid", "high"])
+
+    df.columns = df.columns.str.replace(' ', '_')
+
+    test = Data_classification(df=df, feature_names=['alcohol', 'sulphates', 'citric_acid', 'volatile_acidity', 'chlorides'])
+    test.train_test_split()
+
+    test.decision_tree()
+    test.bayes_algorithm()
+    test.KNN_classification()
+    test.logistic_regression()
+    test.MLPClassifier()
