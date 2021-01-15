@@ -4,10 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import math
 
-df = pd.read_csv("winequality-red.csv")
 
-
-def get_column_value_count_info(column_name, x_step):
+def get_column_value_count_info(df, column_name, x_step):
     selected_column = df[column_name]
     column_min = selected_column.min()
     column_max = selected_column.max()
@@ -24,7 +22,7 @@ def get_column_value_count_info(column_name, x_step):
     plt.show()
 
 
-def param_dependency_on_quality(column_name):
+def param_dependency_on_quality(df, column_name):
     plt.figure(figsize=(8, 5))
     plt.title(f"zależność jakości wina od \"{column_name}\"")
     sns.barplot(x=df['quality'], y=df[column_name], palette="GnBu_d")
@@ -32,7 +30,12 @@ def param_dependency_on_quality(column_name):
     plt.show()
 
 
-def param_dependency_heatmap():
+def param_dependency_heatmap(df):
     plt.figure(figsize=(10, 10))
     sns.heatmap(df.corr(), annot=True, linewidth=0.5, center=0, cmap='coolwarm')
     plt.show();
+
+
+def typed_quality_chart(df):
+    sns.countplot(x=df['typed_quality'])
+    plt.show()
