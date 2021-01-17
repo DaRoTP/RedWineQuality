@@ -9,6 +9,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -33,8 +34,6 @@ def get_confusion_matrix(test_y, predict, classification_title):
 
 
 def get_feature_importance(feature_importance, feature_labels, classificator_name):
-    print(feature_importance)
-    print(feature_labels)
     plt.title("Feature importance "+classificator_name)
     y_pos = np.arange(len(feature_labels))
 
@@ -77,76 +76,86 @@ class Data_classification:
         dtc = DecisionTreeClassifier()
         dtc.fit(self.train_x, self.train_y)
 
-        title = "DECISION TREE"
+        title = "Drzewo decyzyjne"
         print('_===== '+title+' =====_')
-        get_feature_importance(feature_importance=dtc.feature_importances_, feature_labels=self.feature_names,
-                               classificator_name=title)
-        get_data_accuracy(dtc.score(self.test_x, self.test_y))
-        get_confusion_matrix(self.test_y, dtc.predict(self.test_x), 'DECISION TREE')
-        # print(classification_report(self.test_y, dtc.predict(self.test_x), labels=['low', 'mid', 'high']))
+        accuracy = dtc.score(self.test_x, self.test_y)
+        get_data_accuracy(accuracy)
+        get_confusion_matrix(self.test_y, dtc.predict(self.test_x), title)
+        return accuracy
 
     def bayes_algorithm(self):
         nb = GaussianNB()
         nb.fit(self.train_x, self.train_y)
 
-        title = "BAYES ALGO"
+        title = "Naive Bayes"
         print('_===== '+title+' =====_')
-        get_feature_importance(feature_importance=nb., feature_labels=self.feature_names,
-                               classificator_name=title)
-        get_data_accuracy(nb.score(self.test_x, self.test_y))
-        get_confusion_matrix(self.test_y, nb.predict(self.test_x), 'bayes_algorithm')
+        accuracy = nb.score(self.test_x, self.test_y)
+        get_data_accuracy(accuracy)
+        get_confusion_matrix(self.test_y, nb.predict(self.test_x), title)
+        return accuracy
 
     def KNN_classification(self, n_neighbors=2):
         knn = KNeighborsClassifier(n_neighbors=n_neighbors)
         knn.fit(self.train_x, self.train_y)
 
-        title = "KNN_classification"
+        title = "k najbliższych sąsiadów"
         print('_===== '+title+' =====_')
-        # get_feature_importance(feature_importance=knn.feature_importances_, feature_labels=self.feature_names,
-        #                        classificator_name=title)
-        get_data_accuracy(knn.score(self.test_x, self.test_y))
-        get_confusion_matrix(self.test_y, knn.predict(self.test_x), 'KNN_classification')
+        accuracy = knn.score(self.test_x, self.test_y)
+        get_data_accuracy(accuracy)
+        get_confusion_matrix(self.test_y, knn.predict(self.test_x), 'title')
+        return accuracy
 
     def logistic_regression(self):
         lr = LogisticRegression()
         lr.fit(self.train_x, self.train_y)
 
-        title = "logistic_regression"
+        title = "Logistic Regression"
         print('_===== '+title+' =====_')
-        # get_feature_importance(feature_importance=lr.feature_importances_, feature_labels=self.feature_names,
-        #                        classificator_name=title)
-        get_data_accuracy(lr.score(self.test_x, self.test_y))
-        get_confusion_matrix(self.test_y, lr.predict(self.test_x), 'logistic_regression')
+        accuracy = lr.score(self.test_x, self.test_y)
+        get_data_accuracy(accuracy)
+        get_confusion_matrix(self.test_y, lr.predict(self.test_x), title)
+        return accuracy
 
     def MLPClassifier(self):
         clf = MLPClassifier(random_state=1, max_iter=300)
         clf.fit(self.train_x, self.train_y)
 
-        title = "MLPClassifier"
+        title = "Sieći neuronowe MLP"
         print('_===== '+title+' =====_')
-        # get_feature_importance(feature_importance=clf.feature_importances_, feature_labels=self.feature_names,
-        #                        classificator_name=title)
-        get_data_accuracy(clf.score(self.test_x, self.test_y))
-        get_confusion_matrix(self.test_y, clf.predict(self.test_x), 'MLPClassifier')
+        accuracy = clf.score(self.test_x, self.test_y)
+        get_data_accuracy(accuracy)
+        get_confusion_matrix(self.test_y, clf.predict(self.test_x), title)
+        return accuracy
 
     def svn_algorithm(self):
         svm = SVC(random_state=1)
         svm.fit(self.train_x, self.train_y)
 
-        title = "SVC"
+        title = "SVM"
         print('_===== ' + title + ' =====_')
-        # get_feature_importance(feature_importance=svm.feature_importances_, feature_labels=self.feature_names,
-        #                        classificator_name=title)
-        get_data_accuracy(svm.score(self.test_x, self.test_y))
-        get_confusion_matrix(self.test_y, svm.predict(self.test_x), 'svn_algorithm')
+        accuracy = svm.score(self.test_x, self.test_y)
+        get_data_accuracy(accuracy)
+        get_confusion_matrix(self.test_y, svm.predict(self.test_x), title)
+        return accuracy
 
     def random_forest(self):
         rf = RandomForestClassifier(n_estimators=1000, random_state=1)
         rf.fit(self.train_x, self.train_y)
 
-        title = "random_forest"
+        title = "Random Forest"
         print('_===== ' + title + ' =====_')
-        get_feature_importance(feature_importance=rf.feature_importances_, feature_labels=self.feature_names,
-                               classificator_name=title)
-        get_data_accuracy(rf.score(self.test_x, self.test_y))
-        get_confusion_matrix(self.test_y, rf.predict(self.test_x), 'svn_algorithm')
+        accuracy = rf.score(self.test_x, self.test_y)
+        get_data_accuracy(accuracy)
+        get_confusion_matrix(self.test_y, rf.predict(self.test_x), title)
+        return accuracy
+
+    def linear_discriminant(self):
+        lda = LinearDiscriminantAnalysis()
+        lda.fit(self.train_x, self.train_y)
+
+        title = "Linear Discriminant Analysis"
+        print('_===== ' + title + ' =====_')
+        accuracy = lda.score(self.test_x, self.test_y)
+        get_data_accuracy(accuracy)
+        get_confusion_matrix(self.test_y, lda.predict(self.test_x), title)
+        return accuracy
