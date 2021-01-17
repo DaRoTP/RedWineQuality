@@ -36,7 +36,7 @@ def analyze_data(df):
 if __name__ == '__main__':
     df = pd.read_csv("winequality-red.csv")
 
-    df['typed_quality'] = pd.cut(df['quality'], bins=[0, 3, 7, 10], labels=["low", "mid", "high"])
+    df['typed_quality'] = pd.cut(df['quality'], bins=[0, 6.5, 10], labels=["bad", "good"])
 
     df.columns = df.columns.str.replace(' ', '_')
 
@@ -48,3 +48,5 @@ if __name__ == '__main__':
     test.KNN_classification()
     test.logistic_regression()
     test.MLPClassifier()
+    test.svn_algorithm()
+    test.random_forest()
